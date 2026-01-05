@@ -1,0 +1,26 @@
+[Defines]
+  INF_VERSION           = 0x00010019
+  BASE_NAME             = VBSKiller
+  FILE_GUID             = FADCFFF6-E60C-0000-FFFF-B203D6E6686D
+  MODULE_TYPE           = UEFI_APPLICATION
+  VERSION_STRING        = 1.0
+  ENTRY_POINT           = UefiMain
+
+[Sources]
+  VBSKiller.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiLib
+  BaseLib
+  BaseMemoryLib
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+  UefiBootManagerLib
+  DevicePathLib
+  MemoryAllocationLib
+  PrintLib

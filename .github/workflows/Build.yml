@@ -1,0 +1,34 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+            path: VBSKillerPkg
+      - name: Install required software
+        run: |
+          sudo apt-get update
+          sudo apt install build-essential uuid-dev iasl git nasm python-is-python3 gcc
+      - name: Setup EDK2
+        run: |
+          git clone -b edk2-stable202208 --recursive --depth=1 https://github.com/tianocore/edk2 edk2
+          cd edk2
+          make -C BaseTools
+      - name: Compile
+        run: |
+          cd edk2
+          export WORKSPACE=$PWD
+          export EDK_TOOLS_PATH=$WORKSPACE/BaseTools
+          export PACKAGES_PATH=$WORKSPACE:$GITHUB_WORKSPACE
+          . edksetup.sh
+          build -a X64 -t GCC5 -p VBSKillerPkg/VBSKiller.dsc -b RELEASE
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: VBSKiller
+          path: edk2/Build/VBSKiller/RELEASE_GCC5/X64/VBSKiller.efi
